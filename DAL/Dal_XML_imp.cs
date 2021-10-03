@@ -110,34 +110,7 @@ namespace DAL
             ListOfBanks();
         }
 
-        /*  void DownloadBank()
-          {
-              #region downloadBank
-              string xmlLocalPath = @"atm.xml";
-              WebClient wc = new WebClient();
-              try
-              {
-                  string xmlServerPath =
-                 @"https://www.boi.org.il/en/BankingSupervision/BanksAndBranchLocations/Lists/BoiBankBranchesDocs/snifim_en.xml";
-                  wc.DownloadFile(xmlServerPath, xmlLocalPath);
-                  bankDownloaded = true;
-              }
-              catch
-              {
 
-                  string xmlServerPath = @"http://www.jct.ac.il/~coshri/atm.xml";
-                  wc.DownloadFile(xmlServerPath, xmlLocalPath);
-                  bankDownloaded = true;
-
-              }
-              finally
-              {
-                  wc.Dispose();
-              }
-
-              #endregion
-
-          }*/
         void DownloadBank()
         {
             #region downloadBank
