@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using System.Xml.Serialization;
+
 namespace BE
 {
    public class HostingUnit
     {
-        public int HostingUnitKey { get; set; }//check if need to put in configure
+        public int HostingUnitKey { get; set; }
         public Host Owner { get; set; }//owner of hosting unit
         public string HostingUnitName { get; set; }//name of the hosting unit
         [XmlIgnore]

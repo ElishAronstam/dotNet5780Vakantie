@@ -17,7 +17,7 @@ using System.Net;
 
 
 
-namespace DAL
+namespace DAL//
 {
     class Dal_XML_imp : Idal
     {
