@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +21,7 @@ namespace DAL
 {
     class Dal_XML_imp : Idal
     {
+     
         public static volatile bool bankDownloaded = false;//flag if bank was downloaded
         BackgroundWorker worker;
         XElement HostRoot;
@@ -46,16 +47,16 @@ namespace DAL
         static Dal_XML_imp() { }
 
         public Dal_XML_imp()
-        {
+        { 
            
             try
             {
 
                 //הערה: הורדנו את הקובץ של הבנקים פעם אחת , במקרה שישתנה בנק נשנה ידנית
                 //bank download   
-                /*   worker = new BackgroundWorker();
+                   worker = new BackgroundWorker();
                    worker.DoWork += Worker_DoWork;
-                   worker.RunWorkerAsync();*/
+                   worker.RunWorkerAsync();
                 if (!File.Exists(GuestRootPath))
                     CreatFileGuests();
                 else
@@ -86,136 +87,7 @@ namespace DAL
                 throw new FileLoadException("Could not open one of the files" + ex.Message);
             }
         }
-        #region Bank
-
-        /*private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-            object ob = e.Argument;
-            while (bankDownloaded == false)//continues until it downloads
-            {
-                try
-                {
-                   DownloadBank();
-                    Thread.Sleep(2000);//sleeps before trying
-                }
-                catch
-                { }
-            }
-
-            GetAllBankAccounts();//saves branches to ds
-        }*/
-
-        /*void DownloadBank()
-        {
-           
-           if (File.Exists(xmlLocalPath))
-            {
-                try
-                {
-                    ATMRoot = XElement.Load(xmlLocalPath);
-                    bankDownloaded = true;
-                    return;
-                }
-                catch
-                {
-                    throw new FileLoadException("Could not Load file!");
-                }
-                
-            }
-            
-           
-            WebClient wc = new WebClient();
-            try
-            {
-                string xmlServerPath =
-               @"https://www.boi.org.il/en/BankingSupervision/BanksAndBranchLocations/Lists/BoiBankBranchesDocs/snifim_en.xml";
-                wc.DownloadFile(xmlServerPath, xmlLocalPath);
-                bankDownloaded = true;
-            }
-            catch
-            {
-
-                string xmlServerPath = @"http://www.jct.ac.il/~coshri/atm.xml";
-                wc.DownloadFile(xmlServerPath, xmlLocalPath);
-                bankDownloaded = true;
-
-            }
-            finally
-            {
-                wc.Dispose();
-            }
-
-        }
-
-        public IEnumerable<BankAccount> GetAllBankAccounts()
-        {
-
-
-           List<BankAccount> banks = new List<BankAccount>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(@"atm.xml");
-            XmlNode rootNode = doc.DocumentElement;
-            
-
-            XmlNodeList children = rootNode.ChildNodes;
-            foreach (XmlNode child in children)
-            {
-                BankAccount b = GetBranchByXmlNode(child);
-                if (b != null)
-                {
-                    //DataSource.GetBankAccounts().Add(b);
-                    banks.Add(b);
-                }
-            }
-
-            
-             return (IEnumerable<BankAccount>)banks;
-        }
-       /* public IEnumerable<BankAccount> GetAllBankAccounts()
-        {
-            return (IEnumerable<BankAccount>)DataSource.GetBankAccounts();
-        }*/
-
-        /*  private static BankAccount GetBranchByXmlNode(XmlNode node)
-          {
-              if (node.Name != "BRANCH") return null;
-              BankAccount b = new BankAccount();
-
-              XmlNodeList children = node.ChildNodes;
-
-              foreach (XmlNode child in children)
-              {
-                  switch (child.Name)
-                  {
-                      case "Bank_Code":
-                          b.BankNumber = int.Parse(child.InnerText);
-                          break;
-                      case "Bank_Name":
-                          b.BankName = child.InnerText;
-                          break;
-                      case "Branch_Code":
-                          b.BranchNumber = int.Parse(child.InnerText);
-                          break;
-                      case "Branch_Address":
-                          b.BranchAddress = child.InnerText;
-                          break;
-                      case "City":
-                          b.BranchCity = child.InnerText;
-                          break;
-
-                  }
-
-              }
-
-              if (b.BranchNumber > 0)
-                  return b;
-
-              return null;
-
-          }
-          */
-        #endregion
+        
 
         #region Load&Create
     
@@ -235,8 +107,37 @@ namespace DAL
 
                 }
             }
+            ListOfBanks();
         }
 
+        /*  void DownloadBank()
+          {
+              #region downloadBank
+              string xmlLocalPath = @"atm.xml";
+              WebClient wc = new WebClient();
+              try
+              {
+                  string xmlServerPath =
+                 @"https://www.boi.org.il/en/BankingSupervision/BanksAndBranchLocations/Lists/BoiBankBranchesDocs/snifim_en.xml";
+                  wc.DownloadFile(xmlServerPath, xmlLocalPath);
+                  bankDownloaded = true;
+              }
+              catch
+              {
+
+                  string xmlServerPath = @"http://www.jct.ac.il/~coshri/atm.xml";
+                  wc.DownloadFile(xmlServerPath, xmlLocalPath);
+                  bankDownloaded = true;
+
+              }
+              finally
+              {
+                  wc.Dispose();
+              }
+
+              #endregion
+
+          }*/
         void DownloadBank()
         {
             #region downloadBank
