@@ -72,7 +72,7 @@ namespace BL
             
             try
             {
-                dal.AddOrder(order.Clone());
+                dal.AddOrder(order.Clone());//adds order to data base by calling dals function
             }
             catch (DuplicateWaitObjectException e)
             {
@@ -88,7 +88,7 @@ namespace BL
             if (checkID(host.ID))
                 try
                 {
-                    dal.AddHost(host);
+                    dal.AddHost(host);//adds host to data base
                 }
                 catch (DuplicateWaitObjectException e)
                 {
@@ -113,7 +113,7 @@ namespace BL
         #region Update
         public void UpdateGuestReq(Guest guest)//Updates guest
         {
-            if (!CheckDate(guest.EntryDate, guest.ReleaseDate))
+            if (!CheckDate(guest.EntryDate, guest.ReleaseDate))//if dates are allowed
                 throw new ArgumentOutOfRangeException("Dates are not valid/n ");
            
             try
@@ -143,7 +143,7 @@ namespace BL
         {
             Order orig = GetAllOrders().FirstOrDefault(t => t.OrderKey == order.OrderKey);
             if ((orig.Status == Status.Closed_ClientRequest || orig.Status == Status.Closed_NoReply) )
-                throw new TaskCanceledException("Status cannot be changed");
+                throw new TaskCanceledException("Status cannot be changed");//when status closed cant change it anymore
 
             if (orig.Status == Status.Active && order.Status == Status.Active)
                 return;
@@ -181,15 +181,15 @@ namespace BL
                 if (order.OrderDate == default(DateTime))
                     throw new TaskCanceledException("Cannot Update order to closed before an email was sent");
                 Guest guest = dal.GetGuest(order.GuestRequestKey);
-                guest.GuestStatus = Status.Closed_ClientRequest;
-                UpdateGuestReq(guest);
+                guest.GuestStatus = Status.Closed_ClientRequest;//changes the guest status cuz no more emails
+                UpdateGuestReq(guest);//updates the guest after changing his status
                 
                 HostingUnit tmp = dal.GetHostingUnit(order.HostingUnitKey);
-                if (!CheckOffDates(tmp, guest.EntryDate, guest.ReleaseDate))
+                if (!CheckOffDates(tmp, guest.EntryDate, guest.ReleaseDate))//if couldnt reserve dates 
                     throw new TaskCanceledException("could not book dates");
-                Charge(FindHost(order.HostingUnitKey), DaysBetween(guest.EntryDate, guest.ReleaseDate));//charges the host 10 nis 
+                Charge(FindHost(order.HostingUnitKey), DaysBetween(guest.EntryDate, guest.ReleaseDate));//charges the host 10 nis as a commisiion so the website makes $$
                // Charge(tmp, DaysBetween(guest.EntryDate, guest.ReleaseDate));
-                UpdateHostUnit(tmp.Clone());//need if we figure out how to clone diary
+                UpdateHostUnit(tmp.Clone());//cuz we changed diary
                 foreach (Order order1 in dal.GetAllOrders())//closes all orders that are open for this guest
                 {
                     if (order1.GuestRequestKey == guest.GuestRequestKey)
@@ -436,7 +436,7 @@ namespace BL
             {
                 try
                 {
-                    MailMessage mail = new MailMessage();
+                    MailMessage mail = new MailMessage();//the email that will be sent
                     SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
                     mail.From = new MailAddress("vakantiebooking@gmail.com");
                     mail.To.Add(g.EmailAddress);

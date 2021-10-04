@@ -7,7 +7,7 @@ using BE;
 
 namespace DAL
 {
-    public interface Idal
+    public interface Idal//interface 
     {
         #region Guest
         void AddGuestReq(Guest guest);//Adds a new Guest Request
@@ -40,7 +40,7 @@ namespace DAL
 
         #region finds element
         DateTime GetLastUpdated();//returns the date that the orders were last updated 
-        void UpdateLastUpdated();//updates
+        void UpdateLastUpdated();//
         Host GetHost(string id);
         HostingUnit GetHostingUnit(int key);
      

@@ -24,7 +24,7 @@ namespace DAL//
      
         public static volatile bool bankDownloaded = false;//flag if bank was downloaded
         BackgroundWorker worker;
-        XElement HostRoot;
+        XElement HostRoot;//helps us handle the xml files
         XElement HostingUnitRoot;
         XElement GuestRoot;
         XElement OrderRoot;
@@ -36,7 +36,7 @@ namespace DAL//
         string OrderRootPath = @"Orders.xml";
 
         #region Singleton
-        //singleton-alows us to create the instance of dal only once
+        //singleton-alows us to create the instance of dal only once--thread safe
         private static readonly Dal_XML_imp instance = new Dal_XML_imp();
         public static Dal_XML_imp Instance
         {
@@ -51,8 +51,7 @@ namespace DAL//
            
             try
             {
-
-                //הערה: הורדנו את הקובץ של הבנקים פעם אחת , במקרה שישתנה בנק נשנה ידנית
+                
                 //bank download   
                    worker = new BackgroundWorker();
                    worker.DoWork += Worker_DoWork;
@@ -100,14 +99,14 @@ namespace DAL//
                 try
                 {
                     DownloadBank();
-                    Thread.Sleep(2000);//sleeps before trying
+                    Thread.Sleep(2000);//sleeps before re-trying
                 }
                 catch
                 {
 
                 }
             }
-            ListOfBanks();
+            ListOfBanks();//takes only details needed of banks
         }
 
 
@@ -142,8 +141,6 @@ namespace DAL//
 
         public IEnumerable<BankAccount> ListOfBanks()
         {
-
-
             List<BankAccount> banks = new List<BankAccount>();
             XmlDocument doc = new XmlDocument();
             doc.Load(@"atm.xml");
@@ -215,11 +212,11 @@ namespace DAL//
             XElement day = new XElement("day", DateTime.Now.Day);
 
             ConfigRoot = new XElement("Configuration", HostingUnitKey, GuestRequestKey, OrderKey, commission,year,month,day);
-            ConfigRoot.Save(ConfigRootPath);
+            ConfigRoot.Save(ConfigRootPath);//save to path-xml file of config
             
         }
 
-        private void LoadDataGuests()//load from file to program (סוג xelement)
+        private void LoadDataGuests()//load from file to xelement 
         {
             try
             {
@@ -234,7 +231,7 @@ namespace DAL//
         private void CreatFileGuests()//for new file
         {
             GuestRoot = new XElement("Guest");
-            GuestRoot.Save(GuestRootPath);//add new main element
+            GuestRoot.Save(GuestRootPath);//add new main element to the file of guests
         }
 
         private void CreatFileOrder()
@@ -308,7 +305,7 @@ namespace DAL//
         
       
         #region Convert
-        XElement ConvertGuest(Guest guest)
+        XElement ConvertGuest(Guest guest)//converts guest to an Xelement
         {
             XElement GuestElement = new XElement("Guest");
 
@@ -524,10 +521,10 @@ namespace DAL//
                         try
                         {
                             LoadDataConfig();
-                            int num = int.Parse(ConfigRoot.Element("GuestRequestKey").Value) + 1;
+                            int num = int.Parse(ConfigRoot.Element("GuestRequestKey").Value) + 1;//the serial number for guest
                             guest.GuestRequestKey = num;
-                            ConfigRoot.Element("GuestRequestKey").Value = num.ToString();
-                            ConfigRoot.Save(ConfigRootPath);
+                            ConfigRoot.Element("GuestRequestKey").Value = num.ToString();//update current serial number
+                            ConfigRoot.Save(ConfigRootPath);//save element to the file config
 
                         }
                         catch (Exception e)
@@ -537,9 +534,9 @@ namespace DAL//
 
 
                     }
-                    GuestRoot.Add(ConvertGuest(guest));
+                    GuestRoot.Add(ConvertGuest(guest));//guest root is the Xelement that handles the file of guests//after converting we can add to container 
 
-                    GuestRoot.Save(GuestRootPath);
+                    GuestRoot.Save(GuestRootPath);//saves to xml file of guests
                 }
             }
             catch (Exception e)
@@ -731,7 +728,7 @@ namespace DAL//
 
         }
 
-        public List<Order> GetAllOrders()
+        public List<Order> GetAllOrders()//returns all ordrs in the xml file
         {
 
             LoadDataOrder();

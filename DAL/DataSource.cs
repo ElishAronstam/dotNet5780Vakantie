@@ -7,7 +7,7 @@ using BE;
 
 namespace DAL
 {
-    public class DataSource//accessible only in the assembly 
+    public class DataSource//accessible only in the assembly //temp
     {
         private static List<Host> hosts;
         private static List<Guest> guests;

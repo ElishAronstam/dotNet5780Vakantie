@@ -7,21 +7,21 @@ using BE;
 
 namespace DAL
 {
-    class Dal_imp : Idal
-    {//singleton-alows us to create the instance of dal only once
+    class Dal_imp : Idal//implements the functions in the Idal interface
+    {//singleton-alows us to create the instance of dal only once-- thread safe
         #region Singleton
-        private static readonly Dal_imp instance = new Dal_imp();
-        public static Dal_imp Instance
-        {
-            get { return instance; }
-        }
+         private static readonly Dal_imp instance = new Dal_imp();
+         public static Dal_imp Instance
+         {
+             get { return instance; }
+         }
 
-        public Dal_imp() { }//constructors
-        static Dal_imp() { }
-
-        #endregion
+         public Dal_imp() { }//constructors
+         static Dal_imp() { }
         
-     
+        #endregion
+
+
         public Host GetHost(string id) 
             {
             var Host = from host in DataSource.getHosts()
@@ -89,13 +89,13 @@ namespace DAL
                 throw new DuplicateWaitObjectException("Guest with this ID already exists!");
         }
 
-        public void UpdateGuestReq(Guest guest)
+        public void UpdateGuestReq(Guest guest)//recieves an updated  guest and replaces with old
         {
-            int index = DataSource.getGuests().FindIndex(t => t.GuestRequestKey == guest.GuestRequestKey);//finds ondex of guest with id 
+            int index = DataSource.getGuests().FindIndex(t => t.GuestRequestKey == guest.GuestRequestKey);//finds index of guest with id 
             if (index == -1)//meaning id not found
                 throw new KeyNotFoundException("No Guest with this Key!");
          
-            DataSource.getGuests()[index] = guest.Clone();//update the guest
+            DataSource.getGuests()[index] = guest.Clone();//update the guest with clones object
         }
 
         public List<Guest> GetAllGuests()
