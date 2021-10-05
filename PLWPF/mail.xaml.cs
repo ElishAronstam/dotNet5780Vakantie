@@ -23,7 +23,7 @@ namespace PLWPF
     /// </summary>
     public partial class Mail : Window
     {
-          BackgroundWorker worker = new BackgroundWorker();
+        BackgroundWorker worker = new BackgroundWorker();
         Guest gu;
         HostingUnit hu;
         string t;

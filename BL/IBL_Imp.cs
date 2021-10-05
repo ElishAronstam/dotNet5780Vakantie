@@ -416,6 +416,7 @@ namespace BL
             hostingUnit.Owner.CollectionClearance = CollectionClearance.No;//change collection clearence
             return true;
         }
+
         public void SendMail(Order order, string text, string pic)//when status of order is changed to "sent mail", this function will send the mail
         {
             Guest g = dal.GetGuest(order.GuestRequestKey);
@@ -436,9 +437,9 @@ namespace BL
             {
                 try
                 {
-                    MailMessage mail = new MailMessage();//the email that will be sent
+                    MailMessage mail = new MailMessage();
                     SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                    mail.From = new MailAddress("vakantiebooking@gmail.com");
+                    mail.From = new MailAddress("vakantiebooking7@gmail.com");
                     mail.To.Add(g.EmailAddress);
                     mail.Subject = "Vakantie vacation offer";
                     mail.Body = text;
@@ -451,9 +452,9 @@ namespace BL
                     }
 
                     SmtpServer.Port = 587;
-                    SmtpServer.Credentials = new System.Net.NetworkCredential("vakantiebooking@gmail.com", "vakantie2020");
+                    SmtpServer.UseDefaultCredentials = false;
+                    SmtpServer.Credentials = new System.Net.NetworkCredential("vakantiebooking7@gmail.com", "vakantie777");
                     SmtpServer.EnableSsl = true;
-
                     SmtpServer.Send(mail);
                 }
                 catch (Exception e)
